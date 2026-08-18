@@ -16,7 +16,7 @@ import { Cliente, SITUACAO_CLIENTE, SituacaoCliente } from '../../core/data/clie
  *
  * Estrutura definida pelo design system:
  * - titulo "Visualizar <nome>";
- * - um ou mais cartoes de secao, cada um com um grid de 6 colunas;
+ * - um ou mais cartoes de secao, num grid de 1/2/4 colunas;
  * - cada campo e um par rotulo (negrito) + conteudo;
  * - botao "Voltar" no canto inferior direito, fora do ultimo cartao quando ha
  *   varias secoes.
@@ -24,7 +24,7 @@ import { Cliente, SITUACAO_CLIENTE, SituacaoCliente } from '../../core/data/clie
  * Regras:
  * - NUNCA use <input disabled> para exibir dado. Use <app-campo-exibicao>.
  * - Campo sem valor mostra "Nao informado" em cor esmaecida, nunca vazio.
- * - Texto longo ocupa mais colunas via `colunas`, em vez de estourar a celula.
+ * - Texto longo recebe col-span na propria tag, em vez de estourar a celula.
  * - Listas de multipla escolha viram texto separado por ponto e virgula.
  */
 @Component({
@@ -53,30 +53,35 @@ import { Cliente, SITUACAO_CLIENTE, SituacaoCliente } from '../../core/data/clie
             <div class="flex flex-col gap-4">
                 <!-- Identificacao -->
                 <app-secao-exibicao titulo="Identificacao">
-                    <app-campo-exibicao rotulo="Razao social" [valor]="cliente()!.nome" [colunas]="2" />
+                    <!-- Linha 1 no lg: 2+1+1 -->
+                    <app-campo-exibicao rotulo="Razao social" [valor]="cliente()!.nome" class="md:col-span-2" />
                     <app-campo-exibicao rotulo="CNPJ" [valor]="cliente()!.documento" />
                     <!-- Situacao como texto, nao como <p-tag>: o template de
                          visualizacao usa conteudo textual simples. Tag e para
                          listagem, onde ajuda a varrer muitas linhas. -->
                     <app-campo-exibicao rotulo="Situacao" [valor]="rotuloSituacao(cliente()!.situacao)" />
+
+                    <!-- Linha 2 no lg: 1+1+2 -->
                     <app-campo-exibicao rotulo="Cadastro" [valor]="cliente()!.cadastradoEm | date: 'dd/MM/yyyy'" />
                     <app-campo-exibicao rotulo="Codigo" [valor]="cliente()!.id" />
+                    <app-campo-exibicao rotulo="Segmentos" [valor]="segmentos()" class="md:col-span-2" />
 
-                    <!-- Texto longo ocupa mais colunas, como manda o template -->
+                    <!-- Texto longo ocupa a largura toda -->
                     <app-campo-exibicao
                         rotulo="Observacoes"
-                        [colunas]="3"
                         [valor]="observacoes()"
+                        class="md:col-span-2 lg:col-span-4"
                     />
-                    <app-campo-exibicao rotulo="Segmentos" [colunas]="3" [valor]="segmentos()" />
                 </app-secao-exibicao>
 
                 <!-- Contato -->
                 <app-secao-exibicao titulo="Contato">
-                    <app-campo-exibicao rotulo="E-mail" [valor]="cliente()!.email" [colunas]="2" />
-                    <app-campo-exibicao rotulo="Telefone" [valor]="cliente()!.telefone" />
-                    <app-campo-exibicao rotulo="Cidade" [valor]="cliente()!.cidade" />
-                    <app-campo-exibicao rotulo="UF" [valor]="cliente()!.uf" />
+                    <!-- Duas linhas de 2+2. Com 2+1+1 o quinto campo sobrava
+                         sozinho na linha seguinte, deixando 3 colunas vazias. -->
+                    <app-campo-exibicao rotulo="E-mail" [valor]="cliente()!.email" class="lg:col-span-2" />
+                    <app-campo-exibicao rotulo="Telefone" [valor]="cliente()!.telefone" class="lg:col-span-2" />
+                    <app-campo-exibicao rotulo="Cidade" [valor]="cliente()!.cidade" class="lg:col-span-2" />
+                    <app-campo-exibicao rotulo="UF" [valor]="cliente()!.uf" class="lg:col-span-2" />
                 </app-secao-exibicao>
 
                 <!-- Financeiro -->
@@ -85,7 +90,7 @@ import { Cliente, SITUACAO_CLIENTE, SituacaoCliente } from '../../core/data/clie
                         rotulo="Limite de credito"
                         [valor]="cliente()!.limiteCredito | currency: 'BRL'"
                     />
-                    <app-campo-exibicao rotulo="Condicao de pagamento" valor="30 / 60 / 90 dias" />
+                    <app-campo-exibicao rotulo="Condicao de pagamento" valor="30 / 60 / 90 dias" class="md:col-span-2" />
                     <app-campo-exibicao rotulo="Inscricao estadual" [valor]="null" />
                 </app-secao-exibicao>
             </div>

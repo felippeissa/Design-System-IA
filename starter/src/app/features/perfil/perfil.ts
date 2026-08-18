@@ -57,13 +57,25 @@ import { NotificacaoService } from '../../core/ui/notificacao.service';
 
             <!-- Dados de acesso -->
             <app-secao-exibicao titulo="Dados de acesso">
-                <app-campo-exibicao rotulo="Usuario" [valor]="usuario()" [colunas]="2" vazio="Nenhum usuario conectado" />
+                <!-- No lg cada linha fecha as 4 colunas: 1+1+1+1, 2+2, 4 -->
+                <app-campo-exibicao rotulo="Usuario" [valor]="usuario()" vazio="Nenhum usuario conectado" />
                 <app-campo-exibicao rotulo="Perfil" [valor]="perfilLabel()" vazio="Nao selecionado" />
-                <app-campo-exibicao rotulo="Orgao" [valor]="orgaoLabel()" [colunas]="3" vazio="Nao selecionado" />
                 <app-campo-exibicao rotulo="Termos de uso" [valor]="termos()" />
-                <app-campo-exibicao rotulo="Duracao da aprovacao" [valor]="duracao()" [colunas]="2" />
                 <app-campo-exibicao rotulo="Manter conectado" [valor]="manterConectado()" />
-                <app-campo-exibicao rotulo="Dados compartilhados" [colunas]="6" [valor]="atributos()" />
+
+                <app-campo-exibicao
+                    rotulo="Orgao"
+                    [valor]="orgaoLabel()"
+                    vazio="Nao selecionado"
+                    class="md:col-span-2"
+                />
+                <app-campo-exibicao rotulo="Duracao da aprovacao" [valor]="duracao()" class="md:col-span-2" />
+
+                <app-campo-exibicao
+                    rotulo="Dados compartilhados"
+                    [valor]="atributos()"
+                    class="md:col-span-2 lg:col-span-4"
+                />
             </app-secao-exibicao>
 
             <!-- Preferencias: unica secao com controles ativos -->
