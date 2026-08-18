@@ -53,11 +53,20 @@ interface NavItem {
                     (onClick)="drawerVisivel.set(true)"
                 />
 
-                <a routerLink="/" class="flex items-center gap-2 no-underline">
-                    <span class="w-8 h-8 rounded-border bg-primary text-primary-contrast grid place-items-center font-bold">
-                        I
-                    </span>
-                    <span class="text-lg font-semibold text-color hidden sm:inline">Informatiza</span>
+                <!--
+                    Logo oficial. Existem duas variantes porque currentColor NAO
+                    atravessa img: um SVG carregado assim e documento isolado e nao
+                    herda a cor da pagina. Por isso a troca acompanha o tema, nao o CSS.
+                    Nunca substitua por texto nem por placeholder.
+                -->
+                <a routerLink="/" class="flex items-center no-underline" aria-label="Informatiza 3.0 - inicio">
+                    <img
+                        [src]="theme.mode() === 'dark' ? 'logo-informatiza-dark.svg' : 'logo-informatiza.svg'"
+                        alt="Informatiza 3.0"
+                        width="139"
+                        height="30"
+                        class="h-7 w-auto"
+                    />
                 </a>
 
                 <div class="flex-1"></div>

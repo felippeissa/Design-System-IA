@@ -12,6 +12,7 @@ Leia nesta ordem, antes de escrever qualquer código:
 
 1. Este arquivo, inteiro.
 2. `docs/03-componentes.md` — qual componente usar para cada necessidade.
+   E `docs/08-marca.md` se a tela exibir a marca.
 3. O template de referência mais próximo da tela pedida (seção 4 abaixo).
 4. Só então o documento de requisitos do usuário.
 
@@ -80,6 +81,9 @@ ela está errada.
 19. **Todo botão só com ícone** tem `ariaLabel` e `pTooltip`.
 20. **Todo texto visível em português do Brasil.** Código, nomes de variáveis e
     comentários também em português.
+21. **Nunca invente logo.** Use os arquivos oficiais de `starter/public/`,
+    conforme `docs/08-marca.md`. Nada de texto no lugar do logo, nada de
+    placeholder, nada de quadrado colorido com a inicial.
 
 ---
 

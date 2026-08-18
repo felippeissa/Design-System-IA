@@ -54,6 +54,7 @@ Abra http://localhost:4200.
 | [`docs/05-formularios.md`](docs/05-formularios.md) | reactive forms, validação, máscaras |
 | [`docs/06-dados-mock.md`](docs/06-dados-mock.md) | persistência sem backend |
 | [`docs/07-checklist.md`](docs/07-checklist.md) | verificação antes de entregar |
+| [`docs/08-marca.md`](docs/08-marca.md) | logo, favicon e regras de uso da marca |
 
 ### Telas de referência
 

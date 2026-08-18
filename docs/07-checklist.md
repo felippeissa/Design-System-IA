@@ -114,6 +114,14 @@ elemento errado, ou existe um token/`dt` que resolve.
 
 ---
 
+## Marca
+
+- [ ] Logo vem de `starter/public/`, nunca de texto ou placeholder
+- [ ] Variante correta para o tema (clara/escura)
+- [ ] Proporção preservada (`h-7 w-auto`)
+
+---
+
 ## Idioma
 
 - [ ] Todo texto visível em português do Brasil
