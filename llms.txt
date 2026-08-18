@@ -1,0 +1,39 @@
+# Informatiza DS
+
+> Design system Angular 21 + PrimeNG 21 para geracao de telas por IA a partir de
+> documentos de requisitos. Sem backend: dados em localStorage.
+
+Leia AGENTS.md primeiro e por inteiro. Ele e o contrato e tem precedencia sobre
+qualquer outra fonte.
+
+## Essencial
+
+- [AGENTS.md](AGENTS.md): regras invioláveis, stack, onde colocar arquivos, como ler requisitos
+- [docs/03-componentes.md](docs/03-componentes.md): mapa necessidade -> componente PrimeNG
+- [docs/07-checklist.md](docs/07-checklist.md): verificacao antes de entregar
+
+## Detalhamento
+
+- [docs/01-stack.md](docs/01-stack.md): versoes, licenca, arquitetura, nomenclatura
+- [docs/02-tokens.md](docs/02-tokens.md): cores, tema claro/escuro, tipografia
+- [docs/04-layout.md](docs/04-layout.md): shell, grid, responsividade, estados de tela
+- [docs/05-formularios.md](docs/05-formularios.md): reactive forms, validacao, mascaras pt-BR
+- [docs/06-dados-mock.md](docs/06-dados-mock.md): MockCollection, seeds, services
+
+## Templates para copiar
+
+- starter/src/app/features/clientes/clientes-lista.ts: listagem CRUD
+- starter/src/app/features/clientes/cliente-form.ts: formulario criar/editar
+- starter/src/app/features/dashboard/dashboard.ts: dashboard com indicadores
+- starter/src/app/core/layout/app-shell.ts: topbar, menu, toast, confirm
+- starter/src/app/core/data/mock-collection.ts: persistencia em localStorage
+
+## Requisitos
+
+- [requisitos/TEMPLATE.md](requisitos/TEMPLATE.md): formato do documento de entrada
+
+## Referencia sob demanda
+
+- referencia/primeng/components/<componente>.md: API de cada componente PrimeNG (98 arquivos)
+- referencia/primeng/pages/: guias de instalacao, tema, tailwind, acessibilidade
+- referencia/primeng/llms.txt: indice oficial do PrimeNG

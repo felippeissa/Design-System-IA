@@ -1,0 +1,32 @@
+/* =========================================================================
+   Estilos globais - Informatiza DS
+   Tailwind v4 + PrimeNG 21.
+
+   A ordem das cascade layers NAO fica aqui: ela e declarada em
+   src/app/core/theme/informatiza-preset.ts, na opcao `cssLayer`
+   ("theme, base, primeng, utilities"). Isso permite que utilitarios
+   Tailwind sobrescrevam componentes PrimeNG sem precisar de "!important".
+   ========================================================================= */
+
+@import 'tailwindcss';
+@import 'primeicons/primeicons.css';
+@import 'tailwindcss-primeui';
+
+/* Dark mode por classe, alinhado ao darkModeSelector do preset. */
+@custom-variant dark (&:where(.informatiza-dark, .informatiza-dark *));
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--p-surface-50);
+    color: var(--p-text-color);
+}
+
+.informatiza-dark body {
+    background-color: var(--p-surface-950);
+}
