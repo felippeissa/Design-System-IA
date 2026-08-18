@@ -8,15 +8,21 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { SelectModule } from 'primeng/select';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { TagModule } from 'primeng/tag';
-import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ConfirmationService } from 'primeng/api';
 import { NotificacaoService } from '../../core/ui/notificacao.service';
 
 import { ClientesService } from '../../core/data/clientes.service';
-import { Cliente, SITUACAO_CLIENTE, SITUACAO_OPTIONS, SituacaoCliente } from '../../core/data/cliente.model';
+import {
+    Cliente,
+    SITUACAO_CLIENTE,
+    SITUACAO_OPTIONS,
+    SituacaoCliente,
+    UF_OPTIONS
+} from '../../core/data/cliente.model';
 
 /**
  * TEMPLATE DE REFERENCIA: listagem CRUD.
@@ -45,8 +51,8 @@ import { Cliente, SITUACAO_CLIENTE, SITUACAO_OPTIONS, SituacaoCliente } from '..
         IconFieldModule,
         InputIconModule,
         SelectModule,
+        InputNumberModule,
         TagModule,
-        ToolbarModule,
         TooltipModule,
         SkeletonModule
     ],
@@ -62,47 +68,116 @@ import { Cliente, SITUACAO_CLIENTE, SITUACAO_OPTIONS, SituacaoCliente } from '..
             <p-button label="Novo cliente" icon="pi pi-plus" routerLink="/clientes/novo" />
         </div>
 
-        <!-- Filtros -->
-        <p-toolbar styleClass="mb-4 border-surface">
-            <ng-template #start>
-                <div class="flex flex-wrap gap-3">
+        <!--
+            Filtros de pesquisa. Padrao do design system: cartao proprio,
+            campos em grid, e as acoes no canto inferior direito na ordem
+            "Menos/Mais filtros" (texto), "Limpar" (contornado), "Filtrar"
+            (preenchido). O avancado comeca recolhido.
+        -->
+        <section class="p-4 sm:p-6 rounded-border border border-surface bg-surface-0 dark:bg-surface-900 mb-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="flex flex-col gap-2">
+                    <label for="busca" class="font-medium text-color">Nome, documento ou e-mail</label>
                     <p-iconfield>
                         <p-inputicon class="pi pi-search" />
                         <input
                             pInputText
+                            id="busca"
                             type="text"
-                            placeholder="Buscar por nome, documento ou e-mail"
-                            class="w-72"
+                            placeholder="Digite"
+                            class="w-full"
                             [ngModel]="busca()"
                             (ngModelChange)="busca.set($event)"
                         />
                     </p-iconfield>
+                </div>
 
+                <div class="flex flex-col gap-2">
+                    <label for="situacao" class="font-medium text-color">Situacao</label>
                     <p-select
+                        inputId="situacao"
                         [options]="situacaoOptions"
                         optionLabel="label"
                         optionValue="value"
-                        placeholder="Todas as situacoes"
+                        placeholder="Selecione"
                         [showClear]="true"
-                        class="w-56"
+                        styleClass="w-full"
                         [ngModel]="situacao()"
                         (ngModelChange)="situacao.set($event)"
                     />
                 </div>
-            </ng-template>
 
-            <ng-template #end>
+                @if (filtrosAvancados()) {
+                    <div class="flex flex-col gap-2">
+                        <label for="uf" class="font-medium text-color">UF</label>
+                        <p-select
+                            inputId="uf"
+                            [options]="ufOptions"
+                            optionLabel="label"
+                            optionValue="value"
+                            placeholder="Selecione"
+                            [showClear]="true"
+                            [filter]="true"
+                            styleClass="w-full"
+                            [ngModel]="uf()"
+                            (ngModelChange)="uf.set($event)"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="cidade" class="font-medium text-color">Cidade</label>
+                        <input
+                            pInputText
+                            id="cidade"
+                            type="text"
+                            placeholder="Digite"
+                            class="w-full"
+                            [ngModel]="cidade()"
+                            (ngModelChange)="cidade.set($event)"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="limiteMin" class="font-medium text-color">Limite minimo</label>
+                        <p-inputnumber
+                            inputId="limiteMin"
+                            mode="currency"
+                            currency="BRL"
+                            locale="pt-BR"
+                            [min]="0"
+                            styleClass="w-full"
+                            [ngModel]="limiteMinimo()"
+                            (ngModelChange)="limiteMinimo.set($event)"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="limiteMax" class="font-medium text-color">Limite maximo</label>
+                        <p-inputnumber
+                            inputId="limiteMax"
+                            mode="currency"
+                            currency="BRL"
+                            locale="pt-BR"
+                            [min]="0"
+                            styleClass="w-full"
+                            [ngModel]="limiteMaximo()"
+                            (ngModelChange)="limiteMaximo.set($event)"
+                        />
+                    </div>
+                }
+            </div>
+
+            <div class="flex flex-wrap items-center justify-end gap-3 mt-4">
                 <p-button
-                    icon="pi pi-refresh"
-                    severity="secondary"
-                    [outlined]="true"
-                    pTooltip="Restaurar dados de demonstracao"
-                    tooltipPosition="left"
-                    ariaLabel="Restaurar dados"
-                    (onClick)="restaurar()"
+                    [label]="filtrosAvancados() ? 'Menos filtros' : 'Mais filtros'"
+                    [icon]="filtrosAvancados() ? 'pi pi-filter-slash' : 'pi pi-filter'"
+                    [text]="true"
+                    (onClick)="filtrosAvancados.set(!filtrosAvancados())"
                 />
-            </ng-template>
-        </p-toolbar>
+                <p-button label="Limpar" severity="primary" [outlined]="true" (onClick)="limparFiltros()" />
+                <p-button label="Filtrar" icon="pi pi-search" (onClick)="aplicarFiltros()" />
+            </div>
+        </section>
 
         <!-- Tabela -->
         @if (service.loading() && service.total() === 0) {
@@ -135,7 +210,7 @@ import { Cliente, SITUACAO_CLIENTE, SITUACAO_OPTIONS, SituacaoCliente } from '..
                             Cadastro <p-sortIcon field="cadastradoEm" />
                         </th>
                         <th pSortableColumn="situacao">Situacao <p-sortIcon field="situacao" /></th>
-                        <th class="w-28 text-center">Acoes</th>
+                        <th class="w-36 text-center">Acoes</th>
                     </tr>
                 </ng-template>
 
@@ -159,6 +234,15 @@ import { Cliente, SITUACAO_CLIENTE, SITUACAO_OPTIONS, SituacaoCliente } from '..
                         </td>
                         <td>
                             <div class="flex justify-center gap-1">
+                                <p-button
+                                    icon="pi pi-eye"
+                                    severity="secondary"
+                                    [text]="true"
+                                    [rounded]="true"
+                                    pTooltip="Visualizar"
+                                    ariaLabel="Visualizar cliente"
+                                    (onClick)="visualizar(cliente)"
+                                />
                                 <p-button
                                     icon="pi pi-pencil"
                                     severity="secondary"
@@ -210,13 +294,26 @@ export class ClientesLista {
 
     protected readonly situacaoOptions = SITUACAO_OPTIONS;
 
+    protected readonly ufOptions = UF_OPTIONS;
+
+    protected readonly filtrosAvancados = signal(false);
+
     protected readonly busca = signal('');
     protected readonly situacao = signal<SituacaoCliente | null>(null);
+    protected readonly uf = signal<string | null>(null);
+    protected readonly cidade = signal('');
+    protected readonly limiteMinimo = signal<number | null>(null);
+    protected readonly limiteMaximo = signal<number | null>(null);
 
     /** Filtro derivado: recalcula sozinho quando busca, situacao ou dados mudam. */
     protected readonly clientesFiltrados = computed(() => {
         const termo = this.busca().trim().toLowerCase();
         const situacao = this.situacao();
+
+        const uf = this.uf();
+        const cidade = this.cidade().trim().toLowerCase();
+        const minimo = this.limiteMinimo();
+        const maximo = this.limiteMaximo();
 
         return this.service.items().filter((cliente) => {
             const casaTermo =
@@ -225,7 +322,11 @@ export class ClientesLista {
                 cliente.documento.toLowerCase().includes(termo) ||
                 cliente.email.toLowerCase().includes(termo);
             const casaSituacao = !situacao || cliente.situacao === situacao;
-            return casaTermo && casaSituacao;
+            const casaUf = !uf || cliente.uf === uf;
+            const casaCidade = !cidade || cliente.cidade.toLowerCase().includes(cidade);
+            const casaMinimo = minimo === null || cliente.limiteCredito >= minimo;
+            const casaMaximo = maximo === null || cliente.limiteCredito <= maximo;
+            return casaTermo && casaSituacao && casaUf && casaCidade && casaMinimo && casaMaximo;
         });
     });
 
@@ -235,6 +336,28 @@ export class ClientesLista {
 
     protected severidadeSituacao(situacao: SituacaoCliente): 'success' | 'danger' | 'warn' {
         return SITUACAO_CLIENTE[situacao].severity;
+    }
+
+    /**
+     * Os filtros ja sao reativos: `clientesFiltrados` recalcula a cada
+     * digitacao. O botao existe porque o template do design system o preve e
+     * porque reforca a acao para quem espera confirmar a busca.
+     */
+    protected aplicarFiltros(): void {
+        // Nada a fazer: o computed ja refletiu as mudancas.
+    }
+
+    protected limparFiltros(): void {
+        this.busca.set('');
+        this.situacao.set(null);
+        this.uf.set(null);
+        this.cidade.set('');
+        this.limiteMinimo.set(null);
+        this.limiteMaximo.set(null);
+    }
+
+    protected visualizar(cliente: Cliente): void {
+        void this.router.navigate(['/clientes', cliente.id, 'visualizar']);
     }
 
     protected editar(cliente: Cliente): void {

@@ -81,6 +81,12 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/clientes/cliente-form').then((m) => m.ClienteForm)
             },
             {
+                path: 'clientes/:id/visualizar',
+                title: 'Visualizar cliente | Informatiza',
+                loadComponent: () =>
+                    import('./features/clientes/cliente-visualizar').then((m) => m.ClienteVisualizar)
+            },
+            {
                 path: 'clientes/:id',
                 title: 'Editar cliente | Informatiza',
                 loadComponent: () => import('./features/clientes/cliente-form').then((m) => m.ClienteForm)

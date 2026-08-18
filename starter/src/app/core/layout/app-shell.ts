@@ -1,10 +1,15 @@
-import { Component, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TooltipModule } from 'primeng/tooltip';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { FormsModule } from '@angular/forms';
+import { LoginService } from '../data/login.service';
 import { ThemeService } from '../theme/theme.service';
 
 interface NavItem {
@@ -33,7 +38,11 @@ interface NavItem {
         DrawerModule,
         ToastModule,
         ConfirmDialogModule,
-        TooltipModule
+        TooltipModule,
+        InputTextModule,
+        IconFieldModule,
+        InputIconModule,
+        FormsModule
     ],
     template: `
         <!-- Largura fixa de 350px e altura adaptativa, conforme as diretrizes
@@ -83,12 +92,42 @@ interface NavItem {
                     ariaLabel="Alternar tema"
                     (onClick)="theme.toggle()"
                 />
+
+                <!-- Identificacao do usuario e saida, como nos templates -->
+                <span class="hidden sm:flex items-center gap-2 text-color ml-1">
+                    <i class="pi pi-user" aria-hidden="true"></i>
+                    {{ nomeUsuario() }}
+                </span>
+
+                <p-button
+                    icon="pi pi-sign-out"
+                    severity="secondary"
+                    [rounded]="true"
+                    [text]="true"
+                    pTooltip="Sair"
+                    tooltipPosition="bottom"
+                    ariaLabel="Sair do sistema"
+                    (onClick)="sair()"
+                />
             </header>
 
             <div class="flex flex-1 min-h-0">
                 <!-- Navegacao fixa (desktop) -->
                 <nav class="hidden lg:block w-60 shrink-0 border-r border-surface bg-surface-0 dark:bg-surface-900 p-3">
-                    @for (item of nav; track item.route) {
+                    <p-iconfield class="block mb-3">
+                        <p-inputicon class="pi pi-search" />
+                        <input
+                            pInputText
+                            type="text"
+                            placeholder="Digite"
+                            class="w-full"
+                            aria-label="Buscar no menu"
+                            [ngModel]="filtroMenu()"
+                            (ngModelChange)="filtroMenu.set($event)"
+                        />
+                    </p-iconfield>
+
+                    @for (item of navFiltrado(); track item.route) {
                         <a
                             [routerLink]="item.route"
                             routerLinkActive="bg-primary-50 dark:bg-primary-400/10 text-primary font-medium"
@@ -117,23 +156,54 @@ interface NavItem {
                     }
                 </p-drawer>
 
-                <!-- Conteudo -->
-                <main class="flex-1 min-w-0 p-4 sm:p-6">
-                    <router-outlet />
-                </main>
+                <!-- Conteudo + rodape -->
+                <div class="flex-1 min-w-0 flex flex-col">
+                    <main class="flex-1 min-w-0 p-4 sm:p-6">
+                        <router-outlet />
+                    </main>
+
+                    <!-- Rodape institucional, presente em todos os templates -->
+                    <footer
+                        class="shrink-0 py-4 px-4 sm:px-6 text-center text-sm text-muted-color border-t border-surface"
+                    >
+                        Copyright &copy; {{ ano }} &ndash; Estado de Goias &ndash; Todos os direitos reservados.
+                        <span class="ml-4">Versao {{ versao }}</span>
+                    </footer>
+                </div>
             </div>
         </div>
     `
 })
 export class AppShell {
     protected readonly theme = inject(ThemeService);
+    private readonly login = inject(LoginService);
+    private readonly router = inject(Router);
+
     protected readonly drawerVisivel = signal(false);
+    protected readonly filtroMenu = signal('');
+
+    protected readonly ano = new Date().getFullYear();
+    protected readonly versao = '1.2.2';
+
+    /** Nome exibido na topbar. Sem sessao, mostra um rotulo neutro. */
+    protected readonly nomeUsuario = computed(() => this.login.usuario() ?? 'Visitante');
+
+    /** Filtro do menu lateral, alimentado pelo campo de busca. */
+    protected readonly navFiltrado = computed(() => {
+        const termo = this.filtroMenu().trim().toLowerCase();
+        return termo ? this.nav.filter((i) => i.label.toLowerCase().includes(termo)) : this.nav;
+    });
 
     protected readonly nav: NavItem[] = [
         { label: 'Dashboard', icon: 'pi pi-home', route: '/' },
         { label: 'Clientes', icon: 'pi pi-users', route: '/clientes' },
         { label: 'Componentes', icon: 'pi pi-th-large', route: '/components/toast' }
     ];
+
+    protected sair(): void {
+        this.login.sair();
+        void this.router.navigate(['/login/signin']);
+    }
 
     protected get drawerVisivelValue(): boolean {
         return this.drawerVisivel();

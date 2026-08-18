@@ -5,6 +5,50 @@ Git — use `git tag -n99` para ler as descrições no terminal.
 
 ---
 
+## v0.3.0 — "Visualização" · 18/08/2026
+
+Primeira entrega feita a partir da leitura direta do Figma. O conector oficial
+foi autenticado, e os templates de `Informatiza 3.0` passaram a ser a fonte.
+
+### Inventário do Figma
+
+O arquivo tem **8 templates**: Página inicial, Login e logout, Consulta,
+Cadastro, Visualização, Menus e Tipos de Login (este aparecendo duas vezes).
+São 117 frames de primeiro nível na página `🖥️ Templates`.
+
+### Novo
+
+- **Visualização** (`/clientes/:id/visualizar`) — o template que estava
+  totalmente ausente. Cartões de seção com grid de 6 colunas, pares
+  rótulo + conteúdo, campo longo ocupando várias colunas, "Não informado" para
+  vazio, e ações fora dos cartões.
+- **`<app-campo-exibicao>`** e **`<app-secao-exibicao>`** — os tijolos das telas
+  de leitura.
+- **Filtros de consulta** com bloco avançado recolhível: UF, cidade e faixa de
+  limite, mais as ações Mais/Menos filtros, Limpar e Filtrar na ordem do Figma.
+- **Ação "Visualizar"** na listagem.
+
+### Shell alinhado aos templates
+
+Rodapé com copyright e versão, nome do usuário e botão de sair na topbar, e
+campo de busca no topo do menu lateral.
+
+### Documentação
+
+`docs/11-visualizacao-e-filtros.md`, regra 16b no `AGENTS.md` e dois itens novos
+no checklist.
+
+### Ainda pendente
+
+Página inicial conforme o desenho, Tipos de Login, megamenu e submenus,
+formulário com várias seções, e o breadcrumb presente em todos os templates.
+
+A **barra de acessibilidade** aparece no topo de todos os templates do Figma,
+como instância `acessbilitybar`. Foi removida a pedido no `v0.1.0`; o código
+está no commit `dc1a41a`.
+
+---
+
 ## v0.2.0 — "Toast" · 18/08/2026
 
 Implementa o componente Toast conforme a especificação do Figma e cria a

@@ -65,6 +65,8 @@ elemento errado, ou existe um token/`dt` que resolve.
 - [ ] Erro tratado com toast ou `<p-message>`
 - [ ] Botão de submit usa `[loading]`
 - [ ] Registro inexistente tratado no formulário de edição
+- [ ] Tela de leitura usa `<app-campo-exibicao>`, nunca `<input disabled>`
+- [ ] Campo sem valor mostra "Não informado"
 
 ---
 

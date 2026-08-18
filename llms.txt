@@ -22,6 +22,7 @@ qualquer outra fonte.
 - [docs/08-marca.md](docs/08-marca.md): logo oficial, favicon, variantes claro/escuro
 - [docs/09-fluxo-login.md](docs/09-fluxo-login.md): fluxo de login, layout publico, largura de cards e botoes
 - [docs/10-toast.md](docs/10-toast.md): diretrizes do Toast, severidades e mensagens padronizadas
+- [docs/11-visualizacao-e-filtros.md](docs/11-visualizacao-e-filtros.md): tela de detalhe e filtros de consulta
 
 ## Templates para copiar
 
@@ -32,6 +33,8 @@ qualquer outra fonte.
 - starter/src/app/core/layout/auth-layout.ts: layout publico + barra gov.br
 - starter/src/app/features/login/: fluxo de login com 5 telas
 - starter/src/app/features/components/toast-demo.ts: galeria do Toast (/components/toast)
+- starter/src/app/features/clientes/cliente-visualizar.ts: tela de visualizacao (detalhe)
+- starter/src/app/core/ui/campo-exibicao.ts: par rotulo + conteudo para telas de leitura
 - starter/src/app/core/ui/notificacao.service.ts: emissao padronizada de toasts
 - starter/src/app/core/data/mock-collection.ts: persistencia em localStorage
 

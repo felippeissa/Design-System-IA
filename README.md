@@ -57,6 +57,7 @@ Abra http://localhost:4200.
 | [`docs/08-marca.md`](docs/08-marca.md) | logo, favicon e regras de uso da marca |
 | [`docs/09-fluxo-login.md`](docs/09-fluxo-login.md) | telas públicas e fluxo de acesso |
 | [`docs/10-toast.md`](docs/10-toast.md) | diretrizes do Toast e mensagens padronizadas |
+| [`docs/11-visualizacao-e-filtros.md`](docs/11-visualizacao-e-filtros.md) | tela de detalhe e filtros de consulta |
 
 ### Telas de referência
 
@@ -70,6 +71,8 @@ São o material que a IA copia. Estão em `starter/src/app/`:
 | Shell da aplicação | `core/layout/app-shell.ts` |
 | Layout público + barra gov.br | `core/layout/auth-layout.ts` |
 | Fluxo de login (5 telas) | `features/login/` |
+| Visualização (detalhe) | `features/clientes/cliente-visualizar.ts` |
+| Galeria de componentes | `features/components/` |
 
 ---
 

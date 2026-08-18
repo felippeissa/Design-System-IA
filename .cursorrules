@@ -76,6 +76,9 @@ ela está errada.
     (`fb.nonNullable.group`). Nunca `ngModel` solto em formulário.
 15. **Todo campo** tem `<label for="...">` ligado ao `id` / `inputId` do controle.
 16. **Toda tabela** implementa `#emptymessage` (estado vazio).
+16b. **Nunca exiba dado com `<input disabled>`.** Tela de leitura usa
+    `<app-campo-exibicao>`; campo vazio mostra "Não informado". Ver
+    `docs/11-visualizacao-e-filtros.md`.
 17. **Toda ação destrutiva** passa por `ConfirmationService`.
 18. **Todo resultado de ação** (sucesso ou erro) emite toast via
     `NotificacaoService` — nunca `MessageService` direto. Título e descrição
@@ -106,6 +109,8 @@ correspondente. Eles existem para serem clonados.
 | Escolha de contexto (perfil, órgão) | `starter/src/app/features/login/organization-profile.ts` |
 | Tela pública (fora da aplicação) | `starter/src/app/core/layout/auth-layout.ts` |
 | Galeria de componente | `starter/src/app/features/components/toast-demo.ts` |
+| Visualização, detalhe somente leitura | `starter/src/app/features/clientes/cliente-visualizar.ts` |
+| Filtros de consulta simples e avançados | `starter/src/app/features/clientes/clientes-lista.ts` |
 
 ---
 
