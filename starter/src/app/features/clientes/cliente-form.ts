@@ -9,7 +9,7 @@ import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MessageModule } from 'primeng/message';
 import { CardModule } from 'primeng/card';
-import { MessageService } from 'primeng/api';
+import { NotificacaoService } from '../../core/ui/notificacao.service';
 
 import { ClientesService } from '../../core/data/clientes.service';
 import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/cliente.model';
@@ -226,7 +226,7 @@ export class ClienteForm {
     private readonly fb = inject(FormBuilder);
     private readonly service = inject(ClientesService);
     private readonly router = inject(Router);
-    private readonly messages = inject(MessageService);
+    private readonly notificacao = inject(NotificacaoService);
 
     protected readonly situacaoOptions = SITUACAO_OPTIONS;
     protected readonly ufOptions = UF_OPTIONS;
@@ -271,11 +271,7 @@ export class ClienteForm {
 
         if (this.form.invalid) {
             this.form.markAllAsTouched();
-            this.messages.add({
-                severity: 'warn',
-                summary: 'Verifique o formulario',
-                detail: 'Existem campos obrigatorios nao preenchidos.'
-            });
+            this.notificacao.atencao('Existem campos obrigatorios nao preenchidos.');
             return;
         }
 
@@ -286,19 +282,15 @@ export class ClienteForm {
 
             if (id) {
                 await this.service.update(id, dados);
-                this.messages.add({ severity: 'success', summary: 'Cliente atualizado' });
+                this.notificacao.atualizado('Cliente');
             } else {
                 await this.service.create({ ...dados, cadastradoEm: new Date().toISOString().slice(0, 10) });
-                this.messages.add({ severity: 'success', summary: 'Cliente cadastrado' });
+                this.notificacao.criado('Cliente');
             }
 
             void this.router.navigate(['/clientes']);
         } catch {
-            this.messages.add({
-                severity: 'error',
-                summary: 'Nao foi possivel salvar',
-                detail: 'Tente novamente em instantes.'
-            });
+            this.notificacao.erro('Nao foi possivel salvar. Tente novamente em instantes.');
         } finally {
             this.salvando.set(false);
         }

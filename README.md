@@ -55,7 +55,8 @@ Abra http://localhost:4200.
 | [`docs/06-dados-mock.md`](docs/06-dados-mock.md) | persistência sem backend |
 | [`docs/07-checklist.md`](docs/07-checklist.md) | verificação antes de entregar |
 | [`docs/08-marca.md`](docs/08-marca.md) | logo, favicon e regras de uso da marca |
-| [`docs/09-fluxo-login.md`](docs/09-fluxo-login.md) | telas públicas, barra de acessibilidade, fluxo de acesso |
+| [`docs/09-fluxo-login.md`](docs/09-fluxo-login.md) | telas públicas e fluxo de acesso |
+| [`docs/10-toast.md`](docs/10-toast.md) | diretrizes do Toast e mensagens padronizadas |
 
 ### Telas de referência
 

@@ -7,7 +7,7 @@ import { PasswordModule } from 'primeng/password';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
 import { DividerModule } from 'primeng/divider';
-import { MessageService } from 'primeng/api';
+import { NotificacaoService } from '../../core/ui/notificacao.service';
 
 import { AuthCard } from './auth-card';
 import { LoginService } from '../../core/data/login.service';
@@ -151,7 +151,7 @@ export class Signin {
     private readonly fb = inject(FormBuilder);
     private readonly login = inject(LoginService);
     private readonly router = inject(Router);
-    private readonly messages = inject(MessageService);
+    private readonly notificacao = inject(NotificacaoService);
 
     protected readonly entrando = signal(false);
     protected readonly enviado = signal(false);
@@ -186,11 +186,7 @@ export class Signin {
     }
 
     protected async entrarComProvedor(provedor: string): Promise<void> {
-        this.messages.add({
-            severity: 'info',
-            summary: `Entrando com ${provedor}`,
-            detail: 'Integracao com o provedor de identidade ainda nao configurada.'
-        });
+        this.notificacao.informacao(`Integracao com ${provedor} ainda nao configurada.`);
         await this.login.entrar(`usuario.${provedor.toLowerCase().replace(/[^a-z]/g, '')}`, false);
         void this.router.navigate(['/login/terms-of-use']);
     }

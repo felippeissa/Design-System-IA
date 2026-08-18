@@ -16,7 +16,9 @@ import { ToastModule } from 'primeng/toast';
     selector: 'app-auth-layout',
     imports: [RouterOutlet, ToastModule],
     template: `
-        <p-toast position="top-right" />
+        <!-- Largura fixa de 350px e altura adaptativa, conforme as diretrizes
+             do componente. A duracao (3000ms) vem do NotificacaoService. -->
+        <p-toast position="top-right" [style]="{ width: '350px' }" />
 
         <!--
             flex-col + justify-center centraliza na vertical E deixa o eixo

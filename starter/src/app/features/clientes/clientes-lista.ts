@@ -12,7 +12,8 @@ import { TagModule } from 'primeng/tag';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+import { NotificacaoService } from '../../core/ui/notificacao.service';
 
 import { ClientesService } from '../../core/data/clientes.service';
 import { Cliente, SITUACAO_CLIENTE, SITUACAO_OPTIONS, SituacaoCliente } from '../../core/data/cliente.model';
@@ -204,7 +205,7 @@ import { Cliente, SITUACAO_CLIENTE, SITUACAO_OPTIONS, SituacaoCliente } from '..
 export class ClientesLista {
     protected readonly service = inject(ClientesService);
     private readonly router = inject(Router);
-    private readonly messages = inject(MessageService);
+    private readonly notificacao = inject(NotificacaoService);
     private readonly confirmation = inject(ConfirmationService);
 
     protected readonly situacaoOptions = SITUACAO_OPTIONS;
@@ -251,11 +252,7 @@ export class ClientesLista {
             rejectButtonProps: { severity: 'secondary', outlined: true },
             accept: async () => {
                 await this.service.remove(cliente.id);
-                this.messages.add({
-                    severity: 'success',
-                    summary: 'Cliente excluido',
-                    detail: `"${cliente.nome}" foi removido.`
-                });
+                this.notificacao.excluido('Cliente');
             }
         });
     }
@@ -270,7 +267,7 @@ export class ClientesLista {
             rejectButtonProps: { severity: 'secondary', outlined: true },
             accept: () => {
                 this.service.restaurarSeed();
-                this.messages.add({ severity: 'info', summary: 'Dados restaurados' });
+                this.notificacao.informacao('Os dados de demonstracao foram restaurados.');
             }
         });
     }

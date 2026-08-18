@@ -36,7 +36,9 @@ interface NavItem {
         TooltipModule
     ],
     template: `
-        <p-toast position="top-right" />
+        <!-- Largura fixa de 350px e altura adaptativa, conforme as diretrizes
+             do componente. A duracao (3000ms) vem do NotificacaoService. -->
+        <p-toast position="top-right" [style]="{ width: '350px' }" />
         <p-confirmdialog />
 
         <div class="min-h-screen flex flex-col">
@@ -129,7 +131,8 @@ export class AppShell {
 
     protected readonly nav: NavItem[] = [
         { label: 'Dashboard', icon: 'pi pi-home', route: '/' },
-        { label: 'Clientes', icon: 'pi pi-users', route: '/clientes' }
+        { label: 'Clientes', icon: 'pi pi-users', route: '/clientes' },
+        { label: 'Componentes', icon: 'pi pi-th-large', route: '/components/toast' }
     ];
 
     protected get drawerVisivelValue(): boolean {

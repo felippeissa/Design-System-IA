@@ -77,7 +77,9 @@ ela está errada.
 15. **Todo campo** tem `<label for="...">` ligado ao `id` / `inputId` do controle.
 16. **Toda tabela** implementa `#emptymessage` (estado vazio).
 17. **Toda ação destrutiva** passa por `ConfirmationService`.
-18. **Todo resultado de ação** (sucesso ou erro) emite toast via `MessageService`.
+18. **Todo resultado de ação** (sucesso ou erro) emite toast via
+    `NotificacaoService` — nunca `MessageService` direto. Título e descrição
+    são obrigatórios. Ver `docs/10-toast.md`.
 19. **Todo botão só com ícone** tem `ariaLabel` e `pTooltip`.
 20. **Todo texto visível em português do Brasil.** Código, nomes de variáveis e
     comentários também em português.
@@ -103,6 +105,7 @@ correspondente. Eles existem para serem clonados.
 | Consentimento, lista de permissões | `starter/src/app/features/login/consent.ts` |
 | Escolha de contexto (perfil, órgão) | `starter/src/app/features/login/organization-profile.ts` |
 | Tela pública (fora da aplicação) | `starter/src/app/core/layout/auth-layout.ts` |
+| Galeria de componente | `starter/src/app/features/components/toast-demo.ts` |
 
 ---
 

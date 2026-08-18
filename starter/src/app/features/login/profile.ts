@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
+import { NotificacaoService } from '../../core/ui/notificacao.service';
 
 import { AuthCard } from './auth-card';
 import { LoginService } from '../../core/data/login.service';
@@ -78,7 +78,7 @@ export class Profile {
     private readonly fb = inject(FormBuilder);
     private readonly login = inject(LoginService);
     private readonly router = inject(Router);
-    private readonly messages = inject(MessageService);
+    private readonly notificacao = inject(NotificacaoService);
 
     protected readonly perfis = PERFIS;
 
@@ -107,7 +107,7 @@ export class Profile {
         const { perfil, lembrarEscolha } = this.form.getRawValue();
         this.login.definirPerfil(perfil, lembrarEscolha);
 
-        this.messages.add({ severity: 'success', summary: 'Acesso liberado' });
+        this.notificacao.sucesso('Acesso liberado. Redirecionando para o sistema.');
         void this.router.navigate(['/']);
     }
 

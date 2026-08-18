@@ -66,6 +66,11 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard)
             },
             {
+                path: 'components/toast',
+                title: 'Toast | Informatiza',
+                loadComponent: () => import('./features/components/toast-demo').then((m) => m.ToastDemo)
+            },
+            {
                 path: 'clientes',
                 title: 'Clientes | Informatiza',
                 loadComponent: () => import('./features/clientes/clientes-lista').then((m) => m.ClientesLista)

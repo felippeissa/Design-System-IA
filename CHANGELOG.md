@@ -5,6 +5,52 @@ Git — use `git tag -n99` para ler as descrições no terminal.
 
 ---
 
+## v0.2.0 — "Toast" · 18/08/2026
+
+Implementa o componente Toast conforme a especificação do Figma e cria a
+primeira página de galeria de componentes.
+
+### Novo
+
+- **`/components/toast`** — galeria interativa: dispara cada severidade, testa
+  as mensagens padronizadas, valida texto com contador de caracteres ao vivo e
+  documenta as diretrizes. Serve de modelo para as próximas galerias.
+- **`NotificacaoService`** (`core/ui/`) — emissão padronizada. As telas não usam
+  mais `MessageService` direto.
+
+### Diretrizes aplicadas
+
+- Duração de 3000ms, aplicada automaticamente. Pode ser maior, nunca menor.
+- Largura fixa de 350px com altura adaptativa.
+- Título e descrição obrigatórios. A assinatura do service recebe a descrição
+  como primeiro argumento, o que torna o esquecimento impossível.
+- Título com até 34 caracteres e descrição com até 81. Ultrapassar gera aviso no
+  console, apenas em `isDevMode()`.
+- Quatro severidades — success, info, warn e error — com títulos padrão
+  Sucesso / Informação / Atenção / Erro.
+- Mensagens de sucesso padronizadas: `criado`, `atualizado` e `excluido`
+  produzem "<Registro> criado com sucesso." e equivalentes.
+
+### Corrigido
+
+Auditoria das chamadas existentes encontrou **cinco toasts sem descrição**, o que
+viola a estrutura obrigatória. Todos migrados:
+
+| Antes | Depois |
+| --- | --- |
+| `summary: 'Cliente cadastrado'` | `criado('Cliente')` |
+| `summary: 'Cliente atualizado'` | `atualizado('Cliente')` |
+| `summary: 'Cliente excluido'` | `excluido('Cliente')` |
+| `summary: 'Dados restaurados'` | `informacao('Os dados de demonstração foram restaurados.')` |
+| `summary: 'Acesso liberado'` (2×) | `sucesso('Acesso liberado. Redirecionando para o sistema.')` |
+
+### Documentação
+
+`docs/10-toast.md`, regra 18 do `AGENTS.md` reescrita e dois itens novos no
+checklist de entrega.
+
+---
+
 ## v0.1.0 — "Fundação" · 18/08/2026
 
 Primeiro deploy. Entrega a base do design system e o fluxo de autenticação

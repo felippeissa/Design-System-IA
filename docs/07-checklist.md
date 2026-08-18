@@ -100,7 +100,9 @@ elemento errado, ou existe um token/`dt` que resolve.
 - [ ] Seed com 20 a 30 registros **realistas em português**
 - [ ] Sem "Item 1", "Teste", "Lorem ipsum"
 - [ ] Telas leem de `service.items()`, sem copiar para signal próprio
-- [ ] Escrita/exclusão emite toast
+- [ ] Escrita/exclusão emite toast via `NotificacaoService`
+- [ ] Toast tem título E descrição; mensagens de sucesso usam o padrão
+      `criado` / `atualizado` / `excluido`
 - [ ] Exclusão passa por `ConfirmationService`
 
 ---
