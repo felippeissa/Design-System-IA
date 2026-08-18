@@ -1,0 +1,130 @@
+import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { SelectModule } from 'primeng/select';
+import { CheckboxModule } from 'primeng/checkbox';
+import { MessageModule } from 'primeng/message';
+import { MessageService } from 'primeng/api';
+
+import { AuthCard } from './auth-card';
+import { LoginService } from '../../core/data/login.service';
+import { ORGAOS, PERFIS } from '../../core/data/login.model';
+
+/**
+ * TEMPLATE DE REFERENCIA: selecao de contexto com dois niveis.
+ *
+ * Ultima etapa do fluxo: escolher orgao e perfil antes de entrar na aplicacao.
+ * Serve de modelo para qualquer dialogo de escolha com dois selects
+ * dependentes, lembrete de preferencia e par cancelar/continuar.
+ */
+@Component({
+    selector: 'app-organization-profile',
+    imports: [ReactiveFormsModule, AuthCard, ButtonModule, SelectModule, CheckboxModule, MessageModule],
+    template: `
+        <app-auth-card>
+            <form [formGroup]="form" (ngSubmit)="continuar()" novalidate>
+                <h1 class="text-base font-semibold text-color text-center m-0 mb-5">
+                    Escolha um orgao e perfil para acessar o sistema.
+                </h1>
+
+                <div class="flex flex-col gap-2 mb-4">
+                    <label for="orgao" class="font-medium text-color">Orgao</label>
+                    <p-select
+                        inputId="orgao"
+                        formControlName="orgao"
+                        [options]="orgaos"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Escolha uma opcao"
+                        [filter]="true"
+                        filterPlaceholder="Buscar orgao"
+                        styleClass="w-full"
+                        [invalid]="mostrarErro('orgao')"
+                    />
+                    @if (mostrarErro('orgao')) {
+                        <p-message severity="error" size="small" variant="simple">Selecione o orgao.</p-message>
+                    }
+                </div>
+
+                <div class="flex flex-col gap-2 mb-4">
+                    <label for="perfil" class="font-medium text-color">Perfil</label>
+                    <p-select
+                        inputId="perfil"
+                        formControlName="perfil"
+                        [options]="perfis"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Escolha uma opcao"
+                        styleClass="w-full"
+                        [invalid]="mostrarErro('perfil')"
+                    />
+                    @if (mostrarErro('perfil')) {
+                        <p-message severity="error" size="small" variant="simple">Selecione o perfil.</p-message>
+                    }
+                </div>
+
+                <div class="flex items-center gap-2 mb-6">
+                    <p-checkbox inputId="lembrar" formControlName="lembrarEscolha" [binary]="true" />
+                    <label for="lembrar" class="text-color cursor-pointer">Lembrar minha escolha</label>
+                </div>
+
+                <div class="flex gap-3">
+                    <p-button
+                        label="Cancelar"
+                        severity="primary"
+                        [outlined]="true"
+                        styleClass="flex-1"
+                        [disabled]="entrando()"
+                        (onClick)="cancelar()"
+                    />
+                    <p-button type="submit" label="Continuar" styleClass="flex-1" [loading]="entrando()" />
+                </div>
+            </form>
+        </app-auth-card>
+    `
+})
+export class OrganizationProfile {
+    private readonly fb = inject(FormBuilder);
+    private readonly login = inject(LoginService);
+    private readonly router = inject(Router);
+    private readonly messages = inject(MessageService);
+
+    protected readonly orgaos = ORGAOS;
+    protected readonly perfis = PERFIS;
+
+    protected readonly entrando = signal(false);
+    protected readonly enviado = signal(false);
+
+    protected readonly form = this.fb.nonNullable.group({
+        orgao: ['', [Validators.required]],
+        perfil: ['', [Validators.required]],
+        lembrarEscolha: [true]
+    });
+
+    protected mostrarErro(campo: keyof typeof this.form.controls): boolean {
+        const control = this.form.controls[campo];
+        return control.invalid && (control.touched || this.enviado());
+    }
+
+    protected continuar(): void {
+        this.enviado.set(true);
+
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            return;
+        }
+
+        this.entrando.set(true);
+        const { orgao, perfil, lembrarEscolha } = this.form.getRawValue();
+        this.login.definirOrgaoEPerfil(orgao, perfil, lembrarEscolha);
+
+        this.messages.add({ severity: 'success', summary: 'Acesso liberado' });
+        void this.router.navigate(['/']);
+    }
+
+    protected cancelar(): void {
+        this.login.sair();
+        void this.router.navigate(['/login/signin']);
+    }
+}

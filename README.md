@@ -55,6 +55,7 @@ Abra http://localhost:4200.
 | [`docs/06-dados-mock.md`](docs/06-dados-mock.md) | persistência sem backend |
 | [`docs/07-checklist.md`](docs/07-checklist.md) | verificação antes de entregar |
 | [`docs/08-marca.md`](docs/08-marca.md) | logo, favicon e regras de uso da marca |
+| [`docs/09-fluxo-login.md`](docs/09-fluxo-login.md) | telas públicas, barra de acessibilidade, fluxo de acesso |
 
 ### Telas de referência
 
@@ -65,7 +66,9 @@ São o material que a IA copia. Estão em `starter/src/app/`:
 | Listagem CRUD | `features/clientes/clientes-lista.ts` |
 | Formulário | `features/clientes/cliente-form.ts` |
 | Dashboard | `features/dashboard/dashboard.ts` |
-| Shell | `core/layout/app-shell.ts` |
+| Shell da aplicação | `core/layout/app-shell.ts` |
+| Layout público + barra gov.br | `core/layout/auth-layout.ts` |
+| Fluxo de login (5 telas) | `features/login/` |
 
 ---
 

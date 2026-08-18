@@ -30,3 +30,46 @@ body {
 .informatiza-dark body {
     background-color: var(--p-surface-950);
 }
+
+/* =========================================================================
+   Alto contraste (barra de acessibilidade gov.br)
+
+   Acionado pela classe `informatiza-contraste` no <html>, gerenciada por
+   core/a11y/acessibilidade.service.ts.
+
+   Sobrescreve os tokens semanticos do PrimeNG em vez de estilizar componentes
+   um a um: como tudo consome as mesmas variaveis, a interface inteira responde.
+   ========================================================================= */
+.informatiza-contraste {
+    --p-surface-0: #ffffff;
+    --p-surface-50: #ffffff;
+    --p-surface-100: #f2f2f2;
+    --p-surface-200: #e0e0e0;
+    --p-content-background: #ffffff;
+    --p-content-border-color: #000000;
+    --p-text-color: #000000;
+    --p-text-muted-color: #1a1a1a;
+    --p-primary-color: #005c26;
+    --p-primary-contrast-color: #ffffff;
+    --p-content-hover-background: #e8e8e8;
+    --p-focus-ring-color: #000000;
+    --p-focus-ring-width: 3px;
+}
+
+.informatiza-contraste body {
+    background-color: #ffffff;
+}
+
+/* Bordas mais firmes: no alto contraste a moldura precisa ser percebida. */
+.informatiza-contraste .p-inputtext,
+.informatiza-contraste .p-select,
+.informatiza-contraste .p-password-input,
+.informatiza-contraste .p-checkbox-box,
+.informatiza-contraste .p-radiobutton-box {
+    border-color: #000000;
+    border-width: 2px;
+}
+
+.informatiza-contraste a {
+    text-decoration: underline;
+}

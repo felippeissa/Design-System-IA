@@ -98,6 +98,11 @@ correspondente. Eles existem para serem clonados.
 | Cadastro, edição, formulário | `starter/src/app/features/clientes/cliente-form.ts` |
 | Dashboard, painel, indicadores, KPIs | `starter/src/app/features/dashboard/dashboard.ts` |
 | Menu, topbar, navegação | `starter/src/app/core/layout/app-shell.ts` |
+| Login, entrada, autenticação | `starter/src/app/features/login/signin.ts` |
+| Aceite de termos, texto longo + decisão | `starter/src/app/features/login/terms-of-use.ts` |
+| Consentimento, lista de permissões | `starter/src/app/features/login/consent.ts` |
+| Escolha de contexto (perfil, órgão) | `starter/src/app/features/login/organization-profile.ts` |
+| Tela pública (fora da aplicação) | `starter/src/app/core/layout/auth-layout.ts` |
 
 ---
 
