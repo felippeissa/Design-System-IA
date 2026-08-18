@@ -5,6 +5,58 @@ Git — use `git tag -n99` para ler as descrições no terminal.
 
 ---
 
+## v0.5.0 — "Ilhas" · 18/08/2026
+
+Reúne o submenu, a simplificação do grid e a divisão do cadastro em seções.
+Quase tudo aqui nasceu de revisão visual, não de funcionalidade nova.
+
+### Navegação
+
+- **"Componentes" virou grupo** com **Toast** como submenu. Item com filhos é um
+  botão que expande, não um link; o grupo abre sozinho quando a rota atual está
+  dentro dele, e a busca no menu procura também nos filhos.
+- Navegação fixa e drawer passaram a compartilhar um único `ng-template`.
+  Estavam duplicados e teriam divergido na primeira alteração.
+
+### Formulário de cadastro
+
+- Dividido em **três ilhas** — Identificação, Contato e Financeiro — espelhando
+  as seções da tela de visualização do mesmo registro.
+- Novo `<app-secao-formulario>`, espelho do `<app-secao-exibicao>`.
+- Ações saíram do rodapé do cartão para o fundo da página.
+- `<p-inputmask>` não estica sozinho: faltava `styleClass="w-full"`. O CNPJ
+  ficava 39px curto e o Telefone 112px.
+- `max-w-4xl` removido — o formulário era a única tela que não usava a largura
+  disponível, ficando em 896px contra 953px das demais.
+- Contato passou a caber numa linha: os spans somavam 24 colunas (7+5 e 8+4),
+  agora somam 12 (4+3+3+2).
+
+### Regras que passaram a existir
+
+- **Ações ficam fora dos cartões.** Com mais de uma ilha é obrigatório; com ilha
+  única o designer escolhe, e o padrão é manter fora.
+- **Grid: 12 colunas em formulário, 4 em tela de leitura.** De propósito. Campo
+  de digitação preenche a célula mesmo com conteúdo curto, porque é área de
+  clique; campo de leitura não, porque esticá-lo mente sobre o conteúdo.
+- **`col-span` só quando o conteúdo precisa da largura** — nunca para fechar
+  linha, nunca para dar simetria.
+- Controles com largura própria precisam de `styleClass="w-full"`.
+
+### Grid das telas de leitura
+
+O `<app-campo-exibicao>` tinha um input `colunas` numérico que traduzia número
+para classe num `Record` interno — camada de abstração sobre utilitários, que é
+o que a documentação do Tailwind desaconselha. Removido: a largura agora vai
+como `col-span` na própria tag.
+
+### Limpeza
+
+A documentação estava contradizendo o código: citava grid de 6 colunas, o input
+`colunas` que não existe mais, rodapé dentro do cartão e `MessageService`
+direto. Documentação contraditória é pior que ausente, porque a IA lê literal.
+
+---
+
 ## v0.4.0 — "Perfil" · 18/08/2026
 
 ### Novo

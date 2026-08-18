@@ -36,6 +36,8 @@ interface Severidade {
     selector: 'app-toast-demo',
     imports: [FormsModule, ButtonModule, InputTextModule, SelectModule, TagModule, TabsModule],
     template: `
+        <!-- Limite de largura proposital: esta e uma pagina de documentacao,
+             com texto corrido. Telas de dados usam a area toda. -->
         <div class="max-w-4xl">
             <div class="mb-6">
                 <h1 class="text-2xl font-semibold text-color m-0">Toast</h1>

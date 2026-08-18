@@ -46,7 +46,7 @@ import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/c
         SecaoFormulario,
     ],
     template: `
-        <div class="max-w-4xl mx-auto">
+        <div>
             <!-- Cabecalho -->
             <div class="flex items-center gap-3 mb-6">
                 <p-button
@@ -110,8 +110,11 @@ import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/c
                         </div>
                     </app-secao-formulario>
 
+                    <!-- Os quatro campos somam 12 (4+3+3+2), entao cabem numa
+                         linha so. Com 7+5 e 8+4 cada par ja fechava as 12 e a
+                         secao quebrava em duas linhas. -->
                     <app-secao-formulario titulo="Contato">
-                        <div class="col-span-12 md:col-span-7 flex flex-col gap-2">
+                        <div class="col-span-12 md:col-span-4 flex flex-col gap-2">
                             <label for="email" class="font-medium text-color">E-mail *</label>
                             <input
                                 pInputText
@@ -129,7 +132,7 @@ import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/c
                             }
                         </div>
 
-                        <div class="col-span-12 md:col-span-5 flex flex-col gap-2">
+                        <div class="col-span-12 md:col-span-3 flex flex-col gap-2">
                             <label for="telefone" class="font-medium text-color">Telefone</label>
                             <p-inputmask
                                 inputId="telefone"
@@ -140,7 +143,7 @@ import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/c
                             />
                         </div>
 
-                        <div class="col-span-12 md:col-span-8 flex flex-col gap-2">
+                        <div class="col-span-12 md:col-span-3 flex flex-col gap-2">
                             <label for="cidade" class="font-medium text-color">Cidade *</label>
                             <input
                                 pInputText
@@ -156,7 +159,7 @@ import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/c
                             }
                         </div>
 
-                        <div class="col-span-12 md:col-span-4 flex flex-col gap-2">
+                        <div class="col-span-12 md:col-span-2 flex flex-col gap-2">
                             <label for="uf" class="font-medium text-color">UF *</label>
                             <p-select
                                 inputId="uf"
