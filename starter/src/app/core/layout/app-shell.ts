@@ -55,13 +55,22 @@ interface NavItem {
             <header
                 class="h-16 shrink-0 flex items-center gap-3 px-4 border-b border-surface bg-surface-0 dark:bg-surface-900 sticky top-0 z-20"
             >
+                <!--
+                    Um unico botao para os dois modos. Em telas grandes ele
+                    recolhe e expande a navegacao fixa; abaixo de lg abre o
+                    drawer. A decisao e tomada no clique, por matchMedia, em vez
+                    de duplicar o botao com classes de visibilidade.
+                -->
                 <p-button
                     icon="pi pi-bars"
                     severity="secondary"
                     [text]="true"
-                    class="lg:hidden"
-                    ariaLabel="Abrir menu"
-                    (onClick)="drawerVisivel.set(true)"
+                    [rounded]="true"
+                    [pTooltip]="menuRecolhido() ? 'Abrir menu' : 'Fechar menu'"
+                    tooltipPosition="bottom"
+                    [ariaLabel]="menuRecolhido() ? 'Abrir menu lateral' : 'Fechar menu lateral'"
+                    [attr.aria-expanded]="!menuRecolhido()"
+                    (onClick)="alternarMenu()"
                 />
 
                 <!--
@@ -93,11 +102,18 @@ interface NavItem {
                     (onClick)="theme.toggle()"
                 />
 
-                <!-- Identificacao do usuario e saida, como nos templates -->
-                <span class="hidden sm:flex items-center gap-2 text-color ml-1">
-                    <i class="pi pi-user" aria-hidden="true"></i>
-                    {{ nomeUsuario() }}
-                </span>
+                <!-- Identificacao do usuario: leva ao perfil -->
+                <p-button
+                    [label]="nomeUsuario()"
+                    icon="pi pi-user"
+                    severity="secondary"
+                    [text]="true"
+                    routerLink="/perfil"
+                    styleClass="max-w-[12rem]"
+                    pTooltip="Ver meu perfil"
+                    tooltipPosition="bottom"
+                    [ariaLabel]="'Perfil de ' + nomeUsuario()"
+                />
 
                 <p-button
                     icon="pi pi-sign-out"
@@ -113,7 +129,20 @@ interface NavItem {
 
             <div class="flex flex-1 min-h-0">
                 <!-- Navegacao fixa (desktop) -->
-                <nav class="hidden lg:block w-60 shrink-0 border-r border-surface bg-surface-0 dark:bg-surface-900 p-3">
+                <!--
+                    Menu destacado: cartao proprio com margem, sem encostar no
+                    header nem na borda da janela: m-3 com borda completa e canto
+                    arredondado, no lugar do border-r colado.
+
+                    Sem self-start, o item flex estica no eixo transversal e o
+                    cartao acompanha a altura toda da area de conteudo.
+                    O overflow-y-auto cobre o caso de o menu crescer mais que a
+                    tela, rolando por dentro em vez de estourar o layout.
+                -->
+                <nav
+                    class="hidden w-60 shrink-0 m-3 p-3 overflow-y-auto rounded-border border border-surface bg-surface-0 dark:bg-surface-900"
+                    [class.lg:block]="!menuRecolhido()"
+                >
                     <p-iconfield class="block mb-3">
                         <p-inputicon class="pi pi-search" />
                         <input
@@ -180,6 +209,7 @@ export class AppShell {
     private readonly router = inject(Router);
 
     protected readonly drawerVisivel = signal(false);
+    protected readonly menuRecolhido = signal(false);
     protected readonly filtroMenu = signal('');
 
     protected readonly ano = new Date().getFullYear();
@@ -197,8 +227,21 @@ export class AppShell {
     protected readonly nav: NavItem[] = [
         { label: 'Dashboard', icon: 'pi pi-home', route: '/' },
         { label: 'Clientes', icon: 'pi pi-users', route: '/clientes' },
-        { label: 'Componentes', icon: 'pi pi-th-large', route: '/components/toast' }
+        { label: 'Componentes', icon: 'pi pi-th-large', route: '/components/toast' },
+        { label: 'Meu perfil', icon: 'pi pi-user', route: '/perfil' }
     ];
+
+    /**
+     * Em telas grandes recolhe ou expande a navegacao fixa.
+     * Abaixo de lg (1024px) o padrao e o drawer.
+     */
+    protected alternarMenu(): void {
+        if (window.matchMedia('(min-width: 1024px)').matches) {
+            this.menuRecolhido.update((v) => !v);
+        } else {
+            this.drawerVisivel.set(true);
+        }
+    }
 
     protected sair(): void {
         this.login.sair();

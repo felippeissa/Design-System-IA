@@ -73,6 +73,7 @@ São o material que a IA copia. Estão em `starter/src/app/`:
 | Fluxo de login (5 telas) | `features/login/` |
 | Visualização (detalhe) | `features/clientes/cliente-visualizar.ts` |
 | Galeria de componentes | `features/components/` |
+| Perfil do usuário | `features/perfil/perfil.ts` |
 
 ---
 

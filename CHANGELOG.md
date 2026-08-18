@@ -5,6 +5,28 @@ Git — use `git tag -n99` para ler as descrições no terminal.
 
 ---
 
+## v0.4.0 — "Perfil" · 18/08/2026
+
+### Novo
+
+- **`/perfil`** — página do usuário logado, seguindo o template de Visualização:
+  identificação com avatar e situação da sessão, seção de dados de acesso
+  (usuário, perfil, órgão, termos, atributos compartilhados) e seção de
+  preferências com o tema. Sair passa por confirmação.
+
+### Topbar e menu lateral
+
+- **Botão hambúrguer** recolhe e expande o menu. Um botão só para os dois modos:
+  em telas grandes alterna a navegação fixa, abaixo de `lg` abre o drawer. A
+  decisão sai de `matchMedia` no clique, em vez de duplicar o botão com classes
+  de visibilidade.
+- **Nome do usuário virou botão** e leva ao perfil.
+- **Menu destacado do header**: cartão com margem, borda completa e canto
+  arredondado, no lugar da borda lateral colada. Estica até o fim da página e
+  rola por dentro se crescer além da tela.
+
+---
+
 ## v0.3.0 — "Visualização" · 18/08/2026
 
 Primeira entrega feita a partir da leitura direta do Figma. O conector oficial
