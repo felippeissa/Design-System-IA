@@ -36,7 +36,9 @@ import { LoginService } from '../../core/data/login.service';
         DividerModule
     ],
     template: `
-        <app-auth-card>
+        <!-- 28rem e nao 26rem: em 26rem a linha "Mantenha-me conectado" +
+             "Recuperar senha" somava 355px num espaco de 352px e quebrava. -->
+        <app-auth-card largura="max-w-[28rem]">
             <form [formGroup]="form" (ngSubmit)="entrar()" novalidate class="flex flex-col gap-4">
                 <!-- Usuario -->
                 <div class="flex flex-col gap-2">
@@ -77,13 +79,19 @@ import { LoginService } from '../../core/data/login.service';
                     }
                 </div>
 
-                <!-- Manter conectado + recuperar -->
-                <div class="flex flex-wrap items-center justify-between gap-2">
-                    <div class="flex items-center gap-2">
+                <!-- Manter conectado + recuperar: sempre na mesma linha.
+                     Sem flex-wrap; o rotulo encolhe antes de quebrar. -->
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 min-w-0">
                         <p-checkbox inputId="manterConectado" formControlName="manterConectado" [binary]="true" />
-                        <label for="manterConectado" class="text-color cursor-pointer">Mantenha-me conectado</label>
+                        <label for="manterConectado" class="text-color cursor-pointer truncate">
+                            Mantenha-me conectado
+                        </label>
                     </div>
-                    <a routerLink="/login/recuperar-senha" class="text-primary font-medium no-underline hover:underline">
+                    <a
+                        routerLink="/login/recuperar-senha"
+                        class="text-primary font-medium no-underline hover:underline whitespace-nowrap shrink-0"
+                    >
                         Recuperar senha
                     </a>
                 </div>

@@ -21,7 +21,11 @@ import { TERMOS_DE_USO } from '../../core/data/login.model';
     selector: 'app-terms-of-use',
     imports: [AuthCard, ButtonModule, ScrollPanelModule],
     template: `
-        <app-auth-card largura="max-w-[52rem]">
+        <!-- 47rem: com flex-1 os dois botoes ficam iguais, entao a largura
+             precisa comportar o MAIOR rotulo ("Li e nao concordo...", 332px).
+             Em 44rem cada botao recebia 313px e o texto quebrava em duas linhas.
+             A area de texto acompanha a mesma largura da linha de acoes. -->
+        <app-auth-card largura="max-w-[47rem]">
             <h1 class="text-lg sm:text-xl font-semibold text-color text-center m-0 mb-5">
                 Veja nossos termos de uso para acessar o sistema
             </h1>
@@ -30,14 +34,23 @@ import { TERMOS_DE_USO } from '../../core/data/login.model';
                 <div class="text-color leading-relaxed whitespace-pre-line pr-2">{{ termos }}</div>
             </p-scrollpanel>
 
-            <div class="flex flex-col sm:flex-row justify-center gap-3 mt-6">
+            <!-- flex-1 vai no host <p-button>; w-full no <button> interno.
+                 So um dos dois nao faz o botao preencher. -->
+            <div class="flex flex-col sm:flex-row gap-3 mt-6">
                 <p-button
                     label="Li e nao concordo com os termos de uso"
                     severity="primary"
                     [outlined]="true"
+                    class="flex-1"
+                    styleClass="w-full whitespace-nowrap"
                     (onClick)="recusar()"
                 />
-                <p-button label="Li e concordo com os termos de uso" (onClick)="aceitar()" />
+                <p-button
+                    label="Li e concordo com os termos de uso"
+                    class="flex-1"
+                    styleClass="w-full whitespace-nowrap"
+                    (onClick)="aceitar()"
+                />
             </div>
         </app-auth-card>
     `

@@ -49,16 +49,26 @@ import { PERFIS } from '../../core/data/login.model';
                     <label for="lembrar" class="text-color cursor-pointer">Lembrar minha escolha</label>
                 </div>
 
+                <!-- flex-1 vai no host <p-button>; w-full no <button> interno.
+                     styleClass="flex-1" sozinho nao funciona: a classe cai no
+                     botao, que nao e o filho flex do container. -->
                 <div class="flex gap-3">
                     <p-button
                         label="Cancelar"
                         severity="primary"
                         [outlined]="true"
-                        styleClass="flex-1"
+                        class="flex-1"
+                        styleClass="w-full"
                         [disabled]="entrando()"
                         (onClick)="cancelar()"
                     />
-                    <p-button type="submit" label="Continuar" styleClass="flex-1" [loading]="entrando()" />
+                    <p-button
+                        type="submit"
+                        label="Continuar"
+                        class="flex-1"
+                        styleClass="w-full"
+                        [loading]="entrando()"
+                    />
                 </div>
             </form>
         </app-auth-card>

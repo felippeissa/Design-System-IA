@@ -83,6 +83,13 @@ troca-se a implementação do service e as telas não mudam.
 
 ---
 
+## Versões
+
+O log dos deploys fica em [CHANGELOG.md](CHANGELOG.md), com uma tag anotada no Git
+por versão. Use `git tag -n99` para ler as descrições no terminal.
+
+---
+
 ## Licença
 
 O PrimeNG mantém a **versão corrente sob MIT**; versões antigas viram `-lts` e

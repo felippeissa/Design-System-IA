@@ -12,9 +12,13 @@ import { ThemeService } from '../../core/theme/theme.service';
  */
 @Component({
     selector: 'app-auth-card',
+    // Sem `block w-full` no host, o elemento <app-auth-card> fica inline e
+    // encolhe conforme o conteudo. O max-w da <section> entao nunca governa e
+    // cada tela acaba com uma largura diferente.
+    host: { class: 'block w-full' },
     template: `
         <section
-            class="w-full bg-surface-0 dark:bg-surface-900 border border-surface rounded-xl shadow-sm p-6 sm:p-8"
+            class="w-full mx-auto bg-surface-0 dark:bg-surface-900 border border-surface rounded-xl shadow-sm p-6 sm:p-8"
             [class]="largura()"
         >
             <img

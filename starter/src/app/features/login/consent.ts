@@ -95,9 +95,18 @@ import { ATRIBUTOS_CONSENTIMENTO, DURACAO_APROVACAO, DuracaoAprovacao } from '..
                 }
             </div>
 
-            <div class="flex justify-end gap-3 mt-6">
-                <p-button label="Cancelar" severity="primary" [outlined]="true" (onClick)="cancelar()" />
-                <p-button label="Continuar" (onClick)="continuar()" />
+            <!-- Os dois botoes dividem a largura do card em partes iguais.
+                 flex-1 no host <p-button>, w-full no <button> interno. -->
+            <div class="flex gap-3 mt-6">
+                <p-button
+                    label="Cancelar"
+                    severity="primary"
+                    [outlined]="true"
+                    class="flex-1"
+                    styleClass="w-full"
+                    (onClick)="cancelar()"
+                />
+                <p-button label="Continuar" class="flex-1" styleClass="w-full" (onClick)="continuar()" />
             </div>
         </app-auth-card>
     `
