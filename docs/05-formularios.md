@@ -76,21 +76,17 @@ protected async salvar(): Promise<void> {
 
     if (this.form.invalid) {
         this.form.markAllAsTouched();
-        this.messages.add({
-            severity: 'warn',
-            summary: 'Verifique o formulario',
-            detail: 'Existem campos obrigatorios nao preenchidos.'
-        });
+        this.notificacao.atencao('Existem campos obrigatorios nao preenchidos.');
         return;
     }
 
     this.salvando.set(true);
     try {
         await this.service.create(this.form.getRawValue());
-        this.messages.add({ severity: 'success', summary: 'Registro salvo' });
+        this.notificacao.criado('Cliente');
         void this.router.navigate(['/clientes']);
     } catch {
-        this.messages.add({ severity: 'error', summary: 'Nao foi possivel salvar' });
+        this.notificacao.erro('Nao foi possivel salvar. Tente novamente.');
     } finally {
         this.salvando.set(false);
     }
@@ -136,9 +132,20 @@ Trate sempre o caso "não encontrado" — o usuário pode colar uma URL inválid
 
 ---
 
-## Grid responsivo
+## Grid: 12 colunas em formulario, 4 em leitura
 
-Grid de 12 colunas com Tailwind, mobile-first:
+São duas convenções, de propósito:
+
+| Tipo de tela | Grid | Por quê |
+| --- | --- | --- |
+| **Formulário** | `grid-cols-12` | a largura acompanha quanto texto se digita, e 12 colunas permitem 8/4, 7/5, 6/6 |
+| **Leitura** (visualização, perfil) | `grid-cols-1 md:grid-cols-2 lg:grid-cols-4` | o campo só exibe; 4 colunas bastam e evitam span decorativo |
+
+Não unifique as duas. Um campo de digitação deve ocupar a célula inteira mesmo
+com conteúdo curto — é área de clique. Um campo de leitura não: esticá-lo
+sugere que há mais conteúdo do que existe. Ver `docs/11-visualizacao-e-filtros.md`.
+
+No formulário, mobile-first:
 
 ```html
 <div class="grid grid-cols-12 gap-4">
@@ -151,27 +158,60 @@ Grid de 12 colunas com Tailwind, mobile-first:
 No celular tudo empilha (`col-span-12`). Larguras proporcionais entram a partir
 de `md:`.
 
-Formulário longo: agrupe em `<p-card>` ou `<p-fieldset>` por assunto. Acima de
-uns 15 campos, considere `<p-stepper>`.
+Formulário longo: agrupe em seções (abaixo). Acima de uns 15 campos, considere
+`<p-stepper>`.
 
 ---
 
+## Seções: uma ilha por assunto
+
+Formulário longo se divide em cartões, um por assunto, com
+`<app-secao-formulario>`. Referência viva: `features/clientes/cliente-form.ts`,
+que espelha as seções da tela de visualização do mesmo registro.
+
+```html
+<app-secao-formulario titulo="Identificacao">
+    <div class="col-span-12 md:col-span-8 flex flex-col gap-2">...</div>
+    <div class="col-span-12 md:col-span-4 flex flex-col gap-2">...</div>
+</app-secao-formulario>
+```
+
 ## Rodapé de ações
+
+**As ações ficam FORA dos cartões**, no fundo da página. Com mais de uma ilha
+isso é obrigatório. Com ilha única o designer pode escolher, e o padrão é
+manter fora — assim o formulário de uma seção e o de várias têm o mesmo rodapé.
 
 Sempre no fim, alinhado à direita, primária por último:
 
 ```html
-<ng-template #footer>
-    <div class="flex justify-end gap-2 pt-2">
-        <p-button label="Cancelar" severity="secondary" [outlined]="true"
+    </app-secao-formulario>
+
+    <!-- fora dos cartoes -->
+    <div class="flex justify-end gap-3 mt-2">
+        <p-button label="Cancelar" severity="primary" [outlined]="true"
                   routerLink="/clientes" [disabled]="salvando()" />
         <p-button type="submit" label="Salvar" icon="pi pi-check"
                   [loading]="salvando()" />
     </div>
-</ng-template>
+</form>
 ```
 
 ---
+
+## Controles precisam preencher a célula
+
+Nem todo componente PrimeNG estica sozinho. `<p-inputmask>`, `<p-select>`,
+`<p-inputnumber>` e `<p-password>` têm largura própria e ficam curtos dentro da
+célula do grid. Passe `styleClass="w-full"`:
+
+```html
+<p-inputmask inputId="cnpj" formControlName="documento"
+             mask="99.999.999/9999-99" styleClass="w-full" />
+```
+
+Sem isso o campo fica desalinhado dos vizinhos — no formulário de cliente o
+Telefone chegou a sobrar 112px de espaço vazio à direita.
 
 ## Máscaras brasileiras
 

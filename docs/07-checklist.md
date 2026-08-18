@@ -67,6 +67,7 @@ elemento errado, ou existe um token/`dt` que resolve.
 - [ ] Registro inexistente tratado no formulário de edição
 - [ ] Tela de leitura usa `<app-campo-exibicao>`, nunca `<input disabled>`
 - [ ] Campo sem valor mostra "Não informado"
+- [ ] `col-span` só onde o conteúdo precisa da largura, nunca para fechar linha
 
 ---
 
@@ -82,6 +83,9 @@ elemento errado, ou existe um token/`dt` que resolve.
 - [ ] Submit inválido faz `markAllAsTouched()` e avisa
 - [ ] Cancelar volta sem salvar
 - [ ] Máscaras de CPF/CNPJ/CEP/telefone aplicadas
+- [ ] Controles com largura própria receberam `styleClass="w-full"`
+- [ ] Ações fora dos cartões
+- [ ] Formulário usa grid de 12 colunas; tela de leitura usa 4
 
 ---
 

@@ -8,9 +8,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MessageModule } from 'primeng/message';
-import { CardModule } from 'primeng/card';
 import { NotificacaoService } from '../../core/ui/notificacao.service';
 
+import { SecaoFormulario } from '../../core/ui/secao-formulario';
 import { ClientesService } from '../../core/data/clientes.service';
 import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/cliente.model';
 
@@ -22,11 +22,14 @@ import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/c
  *
  * Regras de formulario no Informatiza DS:
  * - sempre ReactiveFormsModule tipado, nunca ngModel avulso;
- * - grid responsivo de 12 colunas com utilitarios Tailwind;
+ * - grid de 12 colunas: em formulario a largura acompanha a quantidade de
+ *   texto digitado, e 12 colunas permitem 8/4 e 7/5. Telas de leitura usam 4;
  * - todo campo tem <label for> ligado ao id do controle;
  * - erro so aparece depois de tocado ou apos submit (ver `mostrarErro`);
  * - a mensagem de erro usa <p-message severity="error" size="small">;
- * - o botao de salvar desabilita enquanto a operacao esta em curso.
+ * - o botao de salvar desabilita enquanto a operacao esta em curso;
+ * - as acoes ficam FORA do cartao. Com mais de uma ilha isso e obrigatorio;
+ *   com ilha unica o designer pode escolher, e o padrao e manter fora.
  */
 @Component({
     selector: 'app-cliente-form',
@@ -40,7 +43,7 @@ import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/c
         SelectModule,
         SelectButtonModule,
         MessageModule,
-        CardModule
+        SecaoFormulario,
     ],
     template: `
         <div class="max-w-4xl mx-auto">
@@ -63,157 +66,162 @@ import { SITUACAO_OPTIONS, SituacaoCliente, UF_OPTIONS } from '../../core/data/c
             @if (naoEncontrado()) {
                 <p-message severity="error" text="Cliente nao encontrado." styleClass="w-full" />
             } @else {
-                <form [formGroup]="form" (ngSubmit)="salvar()" novalidate>
-                    <p-card>
-                        <div class="grid grid-cols-12 gap-4">
-                            <!-- Nome -->
-                            <div class="col-span-12 md:col-span-8 flex flex-col gap-2">
-                                <label for="nome" class="font-medium text-color">Razao social *</label>
-                                <input
-                                    pInputText
-                                    id="nome"
-                                    formControlName="nome"
-                                    placeholder="Ex.: Aurora Tecnologia Ltda"
-                                    [invalid]="mostrarErro('nome')"
-                                    autocomplete="organization"
-                                />
-                                @if (mostrarErro('nome')) {
-                                    <p-message severity="error" size="small" variant="simple">
-                                        Informe a razao social (minimo 3 caracteres).
-                                    </p-message>
-                                }
-                            </div>
-
-                            <!-- Documento -->
-                            <div class="col-span-12 md:col-span-4 flex flex-col gap-2">
-                                <label for="documento" class="font-medium text-color">CNPJ *</label>
-                                <p-inputmask
-                                    inputId="documento"
-                                    formControlName="documento"
-                                    mask="99.999.999/9999-99"
-                                    placeholder="00.000.000/0000-00"
-                                    [invalid]="mostrarErro('documento')"
-                                />
-                                @if (mostrarErro('documento')) {
-                                    <p-message severity="error" size="small" variant="simple">
-                                        Informe um CNPJ completo.
-                                    </p-message>
-                                }
-                            </div>
-
-                            <!-- E-mail -->
-                            <div class="col-span-12 md:col-span-7 flex flex-col gap-2">
-                                <label for="email" class="font-medium text-color">E-mail *</label>
-                                <input
-                                    pInputText
-                                    id="email"
-                                    type="email"
-                                    formControlName="email"
-                                    placeholder="contato@empresa.com.br"
-                                    [invalid]="mostrarErro('email')"
-                                    autocomplete="email"
-                                />
-                                @if (mostrarErro('email')) {
-                                    <p-message severity="error" size="small" variant="simple">
-                                        Informe um e-mail valido.
-                                    </p-message>
-                                }
-                            </div>
-
-                            <!-- Telefone -->
-                            <div class="col-span-12 md:col-span-5 flex flex-col gap-2">
-                                <label for="telefone" class="font-medium text-color">Telefone</label>
-                                <p-inputmask
-                                    inputId="telefone"
-                                    formControlName="telefone"
-                                    mask="(99) 99999-9999"
-                                    placeholder="(11) 90000-0000"
-                                />
-                            </div>
-
-                            <!-- Cidade -->
-                            <div class="col-span-12 md:col-span-8 flex flex-col gap-2">
-                                <label for="cidade" class="font-medium text-color">Cidade *</label>
-                                <input
-                                    pInputText
-                                    id="cidade"
-                                    formControlName="cidade"
-                                    placeholder="Ex.: Belo Horizonte"
-                                    [invalid]="mostrarErro('cidade')"
-                                />
-                                @if (mostrarErro('cidade')) {
-                                    <p-message severity="error" size="small" variant="simple">
-                                        Informe a cidade.
-                                    </p-message>
-                                }
-                            </div>
-
-                            <!-- UF -->
-                            <div class="col-span-12 md:col-span-4 flex flex-col gap-2">
-                                <label for="uf" class="font-medium text-color">UF *</label>
-                                <p-select
-                                    inputId="uf"
-                                    formControlName="uf"
-                                    [options]="ufOptions"
-                                    optionLabel="label"
-                                    optionValue="value"
-                                    placeholder="Selecione"
-                                    [filter]="true"
-                                    [invalid]="mostrarErro('uf')"
-                                />
-                                @if (mostrarErro('uf')) {
-                                    <p-message severity="error" size="small" variant="simple">
-                                        Selecione a UF.
-                                    </p-message>
-                                }
-                            </div>
-
-                            <!-- Limite de credito -->
-                            <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-                                <label for="limiteCredito" class="font-medium text-color">Limite de credito</label>
-                                <p-inputnumber
-                                    inputId="limiteCredito"
-                                    formControlName="limiteCredito"
-                                    mode="currency"
-                                    currency="BRL"
-                                    locale="pt-BR"
-                                    [min]="0"
-                                />
-                            </div>
-
-                            <!-- Situacao -->
-                            <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-                                <label class="font-medium text-color">Situacao *</label>
-                                <p-selectbutton
-                                    formControlName="situacao"
-                                    [options]="situacaoOptions"
-                                    optionLabel="label"
-                                    optionValue="value"
-                                    [allowEmpty]="false"
-                                    ariaLabelledBy="Situacao do cliente"
-                                />
-                            </div>
+                <form [formGroup]="form" (ngSubmit)="salvar()" novalidate class="flex flex-col gap-4">
+                    <!--
+                        Tres ilhas, uma por assunto, espelhando as secoes da tela
+                        de visualizacao. Com mais de uma ilha as acoes ficam
+                        obrigatoriamente fora dos cartoes.
+                    -->
+                    <app-secao-formulario titulo="Identificacao">
+                        <div class="col-span-12 md:col-span-8 flex flex-col gap-2">
+                            <label for="nome" class="font-medium text-color">Razao social *</label>
+                            <input
+                                pInputText
+                                id="nome"
+                                formControlName="nome"
+                                placeholder="Ex.: Aurora Tecnologia Ltda"
+                                [invalid]="mostrarErro('nome')"
+                                autocomplete="organization"
+                            />
+                            @if (mostrarErro('nome')) {
+                                <p-message severity="error" size="small" variant="simple">
+                                    Informe a razao social (minimo 3 caracteres).
+                                </p-message>
+                            }
                         </div>
 
-                        <!-- Acoes: sempre no rodape, primaria a direita -->
-                        <ng-template #footer>
-                            <div class="flex justify-end gap-2 pt-2">
-                                <p-button
-                                    label="Cancelar"
-                                    severity="secondary"
-                                    [outlined]="true"
-                                    routerLink="/clientes"
-                                    [disabled]="salvando()"
-                                />
-                                <p-button
-                                    type="submit"
-                                    label="Salvar"
-                                    icon="pi pi-check"
-                                    [loading]="salvando()"
-                                />
-                            </div>
-                        </ng-template>
-                    </p-card>
+                        <div class="col-span-12 md:col-span-4 flex flex-col gap-2">
+                            <label for="documento" class="font-medium text-color">CNPJ *</label>
+                            <!-- styleClass w-full: o p-inputmask tem largura
+                                 propria e nao acompanha a celula do grid. -->
+                            <p-inputmask
+                                inputId="documento"
+                                formControlName="documento"
+                                mask="99.999.999/9999-99"
+                                placeholder="00.000.000/0000-00"
+                                styleClass="w-full"
+                                [invalid]="mostrarErro('documento')"
+                            />
+                            @if (mostrarErro('documento')) {
+                                <p-message severity="error" size="small" variant="simple">
+                                    Informe um CNPJ completo.
+                                </p-message>
+                            }
+                        </div>
+                    </app-secao-formulario>
+
+                    <app-secao-formulario titulo="Contato">
+                        <div class="col-span-12 md:col-span-7 flex flex-col gap-2">
+                            <label for="email" class="font-medium text-color">E-mail *</label>
+                            <input
+                                pInputText
+                                id="email"
+                                type="email"
+                                formControlName="email"
+                                placeholder="contato@empresa.com.br"
+                                [invalid]="mostrarErro('email')"
+                                autocomplete="email"
+                            />
+                            @if (mostrarErro('email')) {
+                                <p-message severity="error" size="small" variant="simple">
+                                    Informe um e-mail valido.
+                                </p-message>
+                            }
+                        </div>
+
+                        <div class="col-span-12 md:col-span-5 flex flex-col gap-2">
+                            <label for="telefone" class="font-medium text-color">Telefone</label>
+                            <p-inputmask
+                                inputId="telefone"
+                                formControlName="telefone"
+                                mask="(99) 99999-9999"
+                                placeholder="(11) 90000-0000"
+                                styleClass="w-full"
+                            />
+                        </div>
+
+                        <div class="col-span-12 md:col-span-8 flex flex-col gap-2">
+                            <label for="cidade" class="font-medium text-color">Cidade *</label>
+                            <input
+                                pInputText
+                                id="cidade"
+                                formControlName="cidade"
+                                placeholder="Ex.: Belo Horizonte"
+                                [invalid]="mostrarErro('cidade')"
+                            />
+                            @if (mostrarErro('cidade')) {
+                                <p-message severity="error" size="small" variant="simple">
+                                    Informe a cidade.
+                                </p-message>
+                            }
+                        </div>
+
+                        <div class="col-span-12 md:col-span-4 flex flex-col gap-2">
+                            <label for="uf" class="font-medium text-color">UF *</label>
+                            <p-select
+                                inputId="uf"
+                                formControlName="uf"
+                                [options]="ufOptions"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Selecione"
+                                [filter]="true"
+                                styleClass="w-full"
+                                [invalid]="mostrarErro('uf')"
+                            />
+                            @if (mostrarErro('uf')) {
+                                <p-message severity="error" size="small" variant="simple">
+                                    Selecione a UF.
+                                </p-message>
+                            }
+                        </div>
+                    </app-secao-formulario>
+
+                    <app-secao-formulario titulo="Financeiro">
+                        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+                            <label for="limiteCredito" class="font-medium text-color">Limite de credito</label>
+                            <p-inputnumber
+                                inputId="limiteCredito"
+                                formControlName="limiteCredito"
+                                mode="currency"
+                                currency="BRL"
+                                locale="pt-BR"
+                                [min]="0"
+                                styleClass="w-full"
+                            />
+                        </div>
+
+                        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+                            <label class="font-medium text-color">Situacao *</label>
+                            <p-selectbutton
+                                formControlName="situacao"
+                                [options]="situacaoOptions"
+                                optionLabel="label"
+                                optionValue="value"
+                                [allowEmpty]="false"
+                                ariaLabelledBy="Situacao do cliente"
+                            />
+                        </div>
+                    </app-secao-formulario>
+
+                    <!--
+                        Acoes FORA dos cartoes, no fundo da pagina.
+
+                        Regra do design system: com mais de uma ilha o botao fica
+                        obrigatoriamente fora. Com ilha unica o designer pode
+                        escolher, e o padrao e manter fora — assim o formulario
+                        de uma secao e o de varias tem o mesmo rodape.
+                    -->
+                    <div class="flex justify-end gap-3 mt-2">
+                        <p-button
+                            label="Cancelar"
+                            severity="primary"
+                            [outlined]="true"
+                            routerLink="/clientes"
+                            [disabled]="salvando()"
+                        />
+                        <p-button type="submit" label="Salvar" icon="pi pi-check" [loading]="salvando()" />
+                    </div>
                 </form>
             }
         </div>

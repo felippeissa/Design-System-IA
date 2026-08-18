@@ -76,6 +76,9 @@ ela está errada.
     (`fb.nonNullable.group`). Nunca `ngModel` solto em formulário.
 15. **Todo campo** tem `<label for="...">` ligado ao `id` / `inputId` do controle.
 16. **Toda tabela** implementa `#emptymessage` (estado vazio).
+16a. **Grid: 12 colunas em formulário, 4 em tela de leitura.** Não unifique.
+    Em leitura, `col-span` só quando o conteúdo precisa da largura — nunca para
+    fechar linha. Ações ficam FORA dos cartões.
 16b. **Nunca exiba dado com `<input disabled>`.** Tela de leitura usa
     `<app-campo-exibicao>`; campo vazio mostra "Não informado". Ver
     `docs/11-visualizacao-e-filtros.md`.

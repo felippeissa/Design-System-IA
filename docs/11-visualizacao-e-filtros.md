@@ -12,7 +12,7 @@ Rota: `/clientes/:id/visualizar`.
 ### Estrutura
 
 1. Título `Visualizar <nome do registro>`
-2. Um ou mais cartões de seção, cada um com grid de **6 colunas**
+2. Um ou mais cartões de seção, com grid de **1 / 2 / 4 colunas**
 3. Cada campo é um par **rótulo em negrito + conteúdo**
 4. Ações no canto inferior direito, **fora** dos cartões
 
@@ -20,11 +20,15 @@ Com uma seção só, omita o título do cartão. Com várias, cada uma recebe se
 
 ```html
 <app-secao-exibicao titulo="Identificacao">
-    <app-campo-exibicao rotulo="Razao social" [valor]="cliente().nome" [colunas]="2" />
+    <app-campo-exibicao rotulo="Razao social" [valor]="cliente().nome" class="md:col-span-2" />
     <app-campo-exibicao rotulo="CNPJ" [valor]="cliente().documento" />
-    <app-campo-exibicao rotulo="Observacoes" [colunas]="3" [valor]="observacoes()" />
+    <app-campo-exibicao rotulo="Observacoes" [valor]="observacoes()" class="md:col-span-2 lg:col-span-4" />
 </app-secao-exibicao>
 ```
+
+O componente não tem input de colunas: a largura vai como utilitário do Tailwind
+na própria tag. É o que a documentação do Tailwind recomenda — utilitário no
+ponto de uso, em vez de uma API traduzindo número para classe.
 
 ### Regras
 
@@ -35,12 +39,21 @@ por leitores de tela. Use `<app-campo-exibicao>`, que renderiza `<dt>`/`<dd>`.
 **Campo sem valor mostra "Não informado"** em cor esmaecida — nunca deixe a
 célula vazia, que é ambíguo entre "não tem" e "não carregou".
 
-**Texto longo ocupa mais colunas** via `[colunas]`, em vez de espremer numa
+**Texto longo recebe `col-span` na própria tag**, em vez de espremer numa
 célula. O Figma anota: *"Quando o conteúdo for grande, como uma descrição, fica
 a critério do designer a melhor organização."*
 
 **Lista de múltipla escolha vira texto separado por ponto e vírgula.** O Figma
 permite também espaçamento entre linhas ou tabela, conforme o caso.
+
+**Span só quando o conteúdo precisa.** Nunca para fechar linha, nunca para dar
+simetria. Se a seção tem 3 campos curtos num grid de 4 colunas, a última coluna
+fica vazia — e tudo bem. Esticar um campo para preencher passa a impressão
+errada de que ele tem mais conteúdo.
+
+Erramos isso três vezes na mesma tela antes de nomear a regra: um `col-span-2`
+dava 440px a um campo cujo texto ocupava 126px, e o "UF" chegou a receber 440px
+para exibir duas letras. Na dúvida, meça o texto antes de dar span.
 
 **Situação como texto, não `<p-tag>`.** Tag é para listagem, onde ajuda a varrer
 muitas linhas. No detalhe, o conteúdo é textual.
@@ -106,7 +119,6 @@ O breadcrumb dos templates (`início > página anterior > página atual`) ainda
 | Página inicial | Dashboard próprio, diferente do desenho |
 | Tipos de Login | Não iniciado |
 | Menus | Menu lateral simples; falta megamenu e submenus |
-| Cadastro | Falta a variante com várias seções em cartões separados |
 | Breadcrumb | Não implementado |
 | Barra de acessibilidade | **Removida a pedido**, mas está nos templates |
 | Modais de cadastro | `confirmdialog` existe; falta a anotação "Cancelar cadastro: modal obrigatório" |

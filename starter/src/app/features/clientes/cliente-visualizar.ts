@@ -53,7 +53,9 @@ import { Cliente, SITUACAO_CLIENTE, SituacaoCliente } from '../../core/data/clie
             <div class="flex flex-col gap-4">
                 <!-- Identificacao -->
                 <app-secao-exibicao titulo="Identificacao">
-                    <!-- Linha 1 no lg: 2+1+1 -->
+                    <!-- Razao social mantem 2 colunas por ser o identificador
+                         principal: nomes empresariais costumam passar de 208px,
+                         ainda que o registro de exemplo seja curto. -->
                     <app-campo-exibicao rotulo="Razao social" [valor]="cliente()!.nome" class="md:col-span-2" />
                     <app-campo-exibicao rotulo="CNPJ" [valor]="cliente()!.documento" />
                     <!-- Situacao como texto, nao como <p-tag>: o template de
@@ -76,21 +78,26 @@ import { Cliente, SITUACAO_CLIENTE, SituacaoCliente } from '../../core/data/clie
 
                 <!-- Contato -->
                 <app-secao-exibicao titulo="Contato">
-                    <!-- Duas linhas de 2+2. Com 2+1+1 o quinto campo sobrava
-                         sozinho na linha seguinte, deixando 3 colunas vazias. -->
-                    <app-campo-exibicao rotulo="E-mail" [valor]="cliente()!.email" class="lg:col-span-2" />
-                    <app-campo-exibicao rotulo="Telefone" [valor]="cliente()!.telefone" class="lg:col-span-2" />
-                    <app-campo-exibicao rotulo="Cidade" [valor]="cliente()!.cidade" class="lg:col-span-2" />
-                    <app-campo-exibicao rotulo="UF" [valor]="cliente()!.uf" class="lg:col-span-2" />
+                    <!-- Quatro campos, quatro colunas: uma linha, um campo por
+                         coluna. Nao ha motivo para span aqui. -->
+                    <app-campo-exibicao rotulo="E-mail" [valor]="cliente()!.email" />
+                    <app-campo-exibicao rotulo="Telefone" [valor]="cliente()!.telefone" />
+                    <app-campo-exibicao rotulo="Cidade" [valor]="cliente()!.cidade" />
+                    <app-campo-exibicao rotulo="UF" [valor]="cliente()!.uf" />
                 </app-secao-exibicao>
 
                 <!-- Financeiro -->
+                <!--
+                    Tres campos curtos em quatro colunas. A ultima coluna fica
+                    vazia, e tudo bem: esticar um campo so para fechar a linha
+                    passa a impressao errada de que ele tem mais conteudo.
+                -->
                 <app-secao-exibicao titulo="Financeiro">
                     <app-campo-exibicao
                         rotulo="Limite de credito"
                         [valor]="cliente()!.limiteCredito | currency: 'BRL'"
                     />
-                    <app-campo-exibicao rotulo="Condicao de pagamento" valor="30 / 60 / 90 dias" class="md:col-span-2" />
+                    <app-campo-exibicao rotulo="Condicao de pagamento" valor="30 / 60 / 90 dias" />
                     <app-campo-exibicao rotulo="Inscricao estadual" [valor]="null" />
                 </app-secao-exibicao>
             </div>
